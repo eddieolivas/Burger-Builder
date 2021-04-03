@@ -1,6 +1,8 @@
 ## Burger Builder 
 
-The Burger Build is a fun little demo React project I'm building while learning React here: https://www.udemy.com/course/react-the-complete-guide-incl-redux
+The Burger Build is a fun little demo React project I'm building while learning React. 
+
+See it in action here: https://eddies-burger-builder.netlify.app/
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
