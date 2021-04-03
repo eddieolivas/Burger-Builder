@@ -153,9 +153,9 @@ class ContactData extends Component {
   }
 
   render() {
-    const formEelementsArray = [];
+    const formElementsArray = [];
     for (let key in this.state.orderForm) {
-      formEelementsArray.push({
+      formElementsArray.push({
         id: key,
         config: this.state.orderForm[key]
       })
@@ -163,7 +163,7 @@ class ContactData extends Component {
 
     let form = (
       <form onSubmit={this.orderHandler}>
-        {formEelementsArray.map(formElement => (
+        {formElementsArray.map(formElement => (
           <Input 
             key={formElement.id}
             elementType={formElement.config.elementType} 
