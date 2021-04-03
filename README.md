@@ -2,7 +2,7 @@
 
 ![alt text](https://www.chrysaliswebdevelopment.com/wp-content/uploads/2021/04/Screen-Shot-2021-04-02-at-8.37.46-PM.png)
 
-The Burger Build is a fun little demo React project I'm building while learning React. 
+The Burger Builder is a fun little demo project I'm building while learning React. 
 
 See it in action here: https://eddies-burger-builder.netlify.app/
 
