@@ -21,7 +21,7 @@ const sideDrawer = (props) => {
           <Logo clicked={props.drawerToggleClicked}/>
         </div>
         <nav>
-          <NavigationItems clicked={props.drawerToggleClicked}/>
+          <NavigationItems clicked={props.drawerToggleClicked} isAuthenticated={props.isAuth}/>
         </nav>
       </div>
     </Aux>

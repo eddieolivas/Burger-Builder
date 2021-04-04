@@ -10,5 +10,8 @@ export {
   deleteOrder
 } from './order';
 export {
-  auth
+  auth,
+  logOut,
+  setAuthRedirectPath,
+  authCheckState
 } from './auth';
