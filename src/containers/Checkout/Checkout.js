@@ -32,11 +32,7 @@ class Checkout extends Component {
         </div>
       );
     }
-    return (
-      <div>
-          {summary}
-      </div>
-    );
+    return summary;
   }
 }
 

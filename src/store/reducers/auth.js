@@ -34,7 +34,7 @@ const authLogout = (state, action) => {
 }
 
 const setAuthRedirectPath = (state, action) => {
-  return updateObject(state, { authRedirectPath: action.path});
+  return updateObject(state, { authRedirectPath: action.authRedirectPath});
 };
 
 const reducer = (state = initialState, action) => {

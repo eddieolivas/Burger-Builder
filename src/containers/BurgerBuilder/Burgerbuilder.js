@@ -13,7 +13,7 @@ import axios from '../../axios-orders';
 
 class BurgerBuilder extends Component {
   state = {
-    purchasing: false,
+    purchasing: false
   }
 
   componentDidMount () {
@@ -71,7 +71,7 @@ class BurgerBuilder extends Component {
               ingredientAdded={this.props.onIngredientAdded}
               ingredientRemoved={this.props.onIngredientRemoved}
               disabled={disabledInfo}
-              purchaseable={this.updatePurchaseState(this.props.ings)}
+              purchasable={this.updatePurchaseState(this.props.ings)}
               ordered={this.purchaseHandler}
               isAuth={this.props.isAuthenticated}
               price={this.props.price} />
