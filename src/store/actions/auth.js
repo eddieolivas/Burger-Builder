@@ -53,15 +53,6 @@ export const auth = (email, password, isSignup) => {
       url = process.env.REACT_APP_SIGN_UP_URL;
     }
 
-    const updateError = (error, message) => {
-      const newError = {
-        ...error.response.data.error,
-        message: message
-      };
-
-      return newError;
-    };
-
     axios.post(url, authData)
       .then(res => {
         const expirationDate = new Date(new Date ().getTime() + res.data.expiresIn * 1000);
@@ -72,33 +63,7 @@ export const auth = (email, password, isSignup) => {
         dispatch(checkAuthTimeout(res.data.expiresIn));
       })
       .catch(err => {
-        let error = null;
-        if (isSignup) {
-          switch (err.response.data.error.message) {
-            case 'EMAIL_EXISTS':
-              error = updateError(err, "A user with email address already exists.");
-              break;
-            case 'INVALID_EMAIL':
-              error = updateError(err, "The email address you entered is invalid.");
-              break;
-            case 'MISSING_PASSWORD':
-              error = updateError(err, "The password is missing.");
-              break;
-            default:
-              error = err.response.data.error;
-              break;
-          }
-        } else {
-          switch (err.response.data.error.message) {
-            case 'TOO_MANY_ATTEMPTS_TRY_LATER':
-              error = updateError(err, "Too many attempts, please try again later.");
-              break;
-            default:
-              error = updateError(err, "Incorrect username or password.");
-              break;
-          }
-        }
-        dispatch(authFail(error));
+        dispatch(authFail(err));
       });
   };
 };
