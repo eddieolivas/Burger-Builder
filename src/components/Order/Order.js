@@ -29,7 +29,7 @@ class Order extends Component {
           }}
         key={ig.name}>{ig.name} ({ig.amount})</span>;
     });
-    console.log(this.props.id);
+
     return (
     <div className={classes.Order}>
       <p>Ingredients: {ingredientOutput}</p>

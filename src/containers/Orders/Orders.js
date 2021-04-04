@@ -9,7 +9,7 @@ import Spinner from '../../components/UI/Spinner/Spinner';
 
 class Orders extends Component {
 
-  componentWillMount() {
+  componentDidMount() {
     this.props.onFetchOrders(this.props.token, this.props.userId);
   }
  
