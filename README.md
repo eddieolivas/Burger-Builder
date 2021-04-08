@@ -1,6 +1,6 @@
 ## Burger Builder 
 
-The Burger Builder is a fun little demo project I'm building while learning React. 
+The Burger Builder is a fun little demo project built with Create React App. 
 
 See it in action here: https://eddies-burger-builder.netlify.app/
 
