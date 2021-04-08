@@ -54,3 +54,9 @@
   background-color: #99703F;
   color: white;
 }
+
+.Count {
+  background: white;
+  border: 1px solid black;
+  padding: 5px 8px;
+}
