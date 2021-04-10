@@ -48,6 +48,7 @@ class Auth extends Component {
     if (!this.props.building && this.props.authRedirectPath !== '/') {
       this.props.onSetAuthRedirectPath();
     }
+    console.log(this.props.signin);
   }
 
   inputChangedHandler = (event, controlName) => {
