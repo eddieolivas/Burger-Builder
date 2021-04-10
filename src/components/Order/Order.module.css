@@ -6,3 +6,15 @@
   margin: 10px auto;
   box-sizing: border-box;
 }
+
+.Delete {
+  background: rgb(248, 73, 73);
+  border: 1px solid #000;
+  color: #fff;
+  padding: 5px 10px;
+}
+
+.Delete:hover {
+  background: rgb(250, 105, 105);
+  cursor: pointer;
+}

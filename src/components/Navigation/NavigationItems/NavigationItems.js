@@ -9,9 +9,12 @@ const navigationItems = (props) => (
     {props.isAuthenticated 
       ? <NavigationItem link="/orders" clicked={props.clicked}>Orders</NavigationItem>
       : null}
+    {!props.isAuthenticated 
+      ? <NavigationItem link="/sign-up" clicked={props.clicked}>Sign Up</NavigationItem>
+      : null}
     { props.isAuthenticated
       ? <NavigationItem link="/logout" clicked={props.clicked}>Log Out</NavigationItem>
-      : <NavigationItem link="/auth" clicked={props.clicked}>Log In</NavigationItem> }
+      : <NavigationItem link="/login" clicked={props.clicked}>Log In</NavigationItem> }
   </ul>
 );
 
