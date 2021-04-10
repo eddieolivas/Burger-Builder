@@ -33,7 +33,8 @@ class App extends Component {
   render() {
     let routes = (
       <Switch>
-        <Route path="/auth" signin={true} render={props => (<Auth signin={true} />)} />
+        <Route path="/sign-up" render={() => <Auth signup={true} />} />
+        <Route path="/login" render={() => <Auth signup={false} />} />
         <Route path="/" exact component={BurgerBuilder} />
         <Redirect to="/" />
       </Switch>
@@ -45,7 +46,7 @@ class App extends Component {
           <Route path="/checkout" component={asyncCheckout} />
           <Route path="/orders" component={asyncOrders} />
           <Route path="/logout" component={Logout} />
-          <Route path="/auth" signin={true} render={props => (<Auth {...props} />)} />
+          <Route path="/login" signin={true} render={() => <Auth signup={false} />} />
           <Route path="/thank-you" component={asyncThankYou} />
           <Route path="/" exact component={BurgerBuilder} />
           <Redirect to="/" />

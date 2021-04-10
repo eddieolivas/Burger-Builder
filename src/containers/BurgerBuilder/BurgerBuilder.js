@@ -36,7 +36,7 @@ export class BurgerBuilder extends Component {
       this.setState({purchasing: true});
     } else {
       this.props.onSetRedirectPath('/checkout');
-      this.props.history.push('/auth');
+      this.props.history.push('/sign-up');
     }
     
   }

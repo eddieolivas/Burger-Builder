@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 
 import Input from '../../components/UI/Input/Input';
 import Button from '../../components/UI/Button/Button';
@@ -48,7 +49,6 @@ class Auth extends Component {
     if (!this.props.building && this.props.authRedirectPath !== '/') {
       this.props.onSetAuthRedirectPath();
     }
-    console.log(this.props.signin);
   }
 
   inputChangedHandler = (event, controlName) => {
@@ -64,13 +64,7 @@ class Auth extends Component {
 
   submitHandler = (event) => {
     event.preventDefault();
-    this.props.onAuth(this.state.authForm.email.value, this.state.authForm.password.value, this.state.isSignup);
-  }
-
-  switchAuthModeHandler = () => {
-    this.setState(prevState => {
-      return { isSignup: !prevState.isSignup}
-    });
+    this.props.onAuth(this.state.authForm.email.value, this.state.authForm.password.value, this.props.signup);
   }
 
   render () {
@@ -111,17 +105,22 @@ class Auth extends Component {
       authRedirect = <Redirect to={this.props.authRedirectPath} />;
     }
 
+    let alreadyMember = null;
+    if (this.props.signup) {
+      alreadyMember = <p>Already a member?  <Link to="/login">Log In</Link></p>;
+    } else {
+      alreadyMember = <p>Not a member yet?  <Link to="/sign-up">Sign Up</Link></p>;
+    }
+
     return (
       <div className={classes.Auth}>
         {authRedirect}
         <form onSubmit={this.submitHandler}>
           {errorMessage}
           {form}
-          <Button btnType="Success">Log In</Button>
+          <Button btnType="Success">{this.props.signup ? "Sign Up" : "Log In"}</Button>
         </form>
-        <Button 
-            clicked={this.switchAuthModeHandler}
-            btnType="Danger">Switch to {this.state.isSignup ? 'Sign In' : 'Sign Up'}</Button>
+        {alreadyMember}
       </div>
     );
   }

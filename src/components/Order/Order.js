@@ -34,7 +34,7 @@ class Order extends Component {
     <div className={classes.Order}>
       <p>Ingredients: {ingredientOutput}</p>
       <p>Price: <strong>${Number.parseFloat(this.props.price).toFixed(2)}</strong></p>
-      <button onClick={() => this.props.deleteOrder(this.props.id, this.props.token)}>Delete</button>
+      <button className={classes.Delete} onClick={() => this.props.deleteOrder(this.props.id, this.props.token)}>Delete</button>
     </div>
     );
   }
