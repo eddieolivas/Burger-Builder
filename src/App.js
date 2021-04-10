@@ -47,6 +47,7 @@ class App extends Component {
           <Route path="/orders" component={asyncOrders} />
           <Route path="/logout" component={Logout} />
           <Route path="/login" signin={true} render={() => <Auth signup={false} />} />
+          <Route path="/sign-up" signin={true} render={() => <Auth signup={true} />} />
           <Route path="/thank-you" component={asyncThankYou} />
           <Route path="/" exact component={BurgerBuilder} />
           <Redirect to="/" />
