@@ -15,6 +15,7 @@ class EditOrder extends Component {
     return (
       <div className={classes.EditOrder}>
         <h1>Edit Order Page</h1>
+        <h2>Price: {this.props.price}</h2>
         <button onClick={() => this.props.edit()}>Back to Orders</button>
       </div>
     );

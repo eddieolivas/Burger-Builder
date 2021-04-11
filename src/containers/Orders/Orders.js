@@ -11,24 +11,36 @@ import Spinner from '../../components/UI/Spinner/Spinner';
 class Orders extends Component {
 
   state = {
-    editing: false
+    editing: false,
+    editingId: null
   }
 
   componentDidMount() {
     this.props.onFetchOrders(this.props.token, this.props.userId);
   }
 
-  editOrderHandler = () => {
+  editOrderHandler = (orderId) => {
     this.setState({
-      editing: !this.state.editing
+      editing: !this.state.editing,
+      editingId: orderId
     });
+    return orderId;
+  }
+
+  showOrderId = (orderId) => {
+    return orderId;
   }
  
   render () {
     let orders = <Spinner />;
+
     if (!this.props.loading) {
       if (this.state.editing) {
-        orders = <EditOrder edit={this.editOrderHandler} />;
+        let order = this.props.orders.find(order => order.id === this.state.editingId); 
+        orders = <EditOrder 
+          edit={this.editOrderHandler}
+          price={order.price}
+          orderInfo={order.data} />;
       } else {
         orders = this.props.orders.map( order => (
           <Order 
@@ -36,7 +48,7 @@ class Orders extends Component {
               ingredients={order.ingredients}
               price={order.price}
               id={order.id}
-              edit={this.editOrderHandler} />
+              edit={() => this.editOrderHandler(order.id)} />
         ) );
       }
     }
@@ -53,8 +65,7 @@ const mapStateToProps = state => {
     orders: state.order.orders,
     loading: state.order.loading,
     token: state.auth.token,
-    userId: state.auth.userId,
-    editing: false
+    userId: state.auth.userId
   };
 };
 
