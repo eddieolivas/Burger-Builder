@@ -23,9 +23,9 @@ class Order extends Component {
         style={{
           textTransform: 'capitalize',
           display: 'inline-block',
-          margin: '0 8px',
+          margin: '8px 5px',
           border: '1px solid #ccc',
-          padding: '5px'
+          padding: '5px',
           }}
         key={ig.name}>{ig.name} ({ig.amount})</span>;
     });
@@ -34,6 +34,7 @@ class Order extends Component {
     <div className={classes.Order}>
       <p>Ingredients: {ingredientOutput}</p>
       <p>Price: <strong>${Number.parseFloat(this.props.price).toFixed(2)}</strong></p>
+      <button className={classes.Edit} onClick={() => this.props.edit()}>Edit</button>
       <button className={classes.Delete} onClick={() => this.props.deleteOrder(this.props.id, this.props.token)}>Delete</button>
     </div>
     );

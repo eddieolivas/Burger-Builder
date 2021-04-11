@@ -18,3 +18,15 @@
   background: rgb(250, 105, 105);
   cursor: pointer;
 }
+
+.Edit {
+  background: #fff;
+  border: 1px solid #000;
+  margin: 8px;
+  padding: 5px 10px;
+}
+
+.Edit:hover {
+  background: #eee;
+  cursor: pointer;
+}
