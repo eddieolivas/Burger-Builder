@@ -60,7 +60,7 @@ class EditOrder extends Component {
     return (
       <div className={classes.EditOrder}>
         <h1>Edit Order</h1>
-        <p><strong>Price: </strong>{this.props.price}</p>
+        <p><strong>Price: </strong>${Number.parseFloat(this.props.price).toFixed(2)}</p>
         <p><strong>ID: </strong>{this.props.id}</p>
         <p><strong>Ingredients: </strong>{ingredientOutput}</p>
         <p><strong>Order Data: </strong>{orderDataOutput}</p>
