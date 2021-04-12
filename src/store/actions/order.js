@@ -68,14 +68,14 @@ export const fetchOrders = (token, userId, orderId = null) => {
   
     axios.get('/orders.json' + queryParams)
       .then(res => {
-        const fetchedOrders = [];
+        let fetchedOrders = [];
         for (let key in res.data) {
           fetchedOrders.push({
             ...res.data[key],
             id: key
           });
         }
-        fetchedOrders.sort((a, b) => (a.id < b.id) ? 1: -1);
+        fetchedOrders = fetchedOrders.sort((a, b) => (a.id < b.id) ? 1 : -1);
         dispatch(fetchOrdersSuccess(fetchedOrders));
       })
       .catch(err => {
