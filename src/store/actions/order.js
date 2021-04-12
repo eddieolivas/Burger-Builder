@@ -27,7 +27,6 @@ export const purchaseBurger = (orderData, token) => {
     dispatch(purchaseBurgerStart());
     axios.post('/orders.json?auth=' + token, orderData)
       .then(response => {
-        console.log(response);
         dispatch(purchaseBurgerSuccess(response.data.name, orderData));
       })
       .catch(error => {
@@ -65,7 +64,7 @@ export const fetchOrdersStart = () => {
 export const fetchOrders = (token, userId, orderId = null) => {
   return dispatch => {
     dispatch(fetchOrdersStart());
-    const queryParams = '?auth=' + token + '&orderBy="userId"&equalTo="' + userId + '"';
+    const queryParams = '?auth=' + token + '&orderBy="userId"&equalTo="' + userId + '"&orderBy="id"';
   
     axios.get('/orders.json' + queryParams)
       .then(res => {
@@ -76,6 +75,7 @@ export const fetchOrders = (token, userId, orderId = null) => {
             id: key
           });
         }
+        fetchedOrders.sort((a, b) => (a.id < b.id) ? 1: -1);
         dispatch(fetchOrdersSuccess(fetchedOrders));
       })
       .catch(err => {
@@ -117,3 +117,42 @@ export const deleteOrder = (orderId, token) => {
       });
   };
 };
+
+export const editOrderStart = (orderId) => {
+  return {
+    type: actionTypes.EDIT_ORDER_START,
+    orderId: orderId
+  };
+};
+
+export const editOrderFailed = (error) => {
+  return {
+    type: actionTypes.EDIT_ORDER_FAILED
+  };
+};
+
+export const editOrderSuccess = () => {
+  return {
+    type: actionTypes.EDIT_ORDER_SUCCESS
+  };
+};
+
+export const editOrder = (orderId) => {
+  return dispatch => {
+    dispatch(editOrderStart(orderId));
+    // const queryParams = '?auth=' + token + '&orderBy="id"&equalTo="' + orderId + '"';
+    // axios.put('/orders.json' + queryParams)
+    //   .then(res => {
+    //     dispatch(editOrderSuccess());
+    //   })
+    //   .catch(err => {
+    //     dispatch(editOrderFailed(err));
+    //   });
+  }
+}
+
+export const updateOrder = (orderId) => {
+  return dispatch => {
+    dispatch(editOrderSuccess());
+  }
+}

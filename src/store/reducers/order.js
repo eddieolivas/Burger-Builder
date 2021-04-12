@@ -4,7 +4,9 @@ import { updateObject } from '../../shared/utility';
 const initialState = {
   orders: [],
   loading: false,
-  purchased: false
+  purchased: false,
+  editing: false,
+  editOrderId: null
 };
 
 const purchaseInit = (state, action) => {
@@ -64,6 +66,20 @@ const deleteOrderFailed = (state, action) => {
   return updateObject(state, { loading: false });
 };
 
+const editOrderStart = (state, action) => {
+  return updateObject(state, {
+    editing: true,
+    editOrderId: action.orderId
+  });
+};
+
+const editOrderSuccess = (state, action) => {
+  return updateObject(state, {
+    editing: false,
+    editOrderId: null
+  });
+};
+
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case actionTypes.PURCHASE_INIT: return purchaseInit(state, action);      
@@ -76,6 +92,8 @@ const reducer = (state = initialState, action) => {
     case actionTypes.DELETE_ORDER_START: return deleteOrderStart(state, action);
     case actionTypes.DELETE_ORDER_SUCCESS: return deleteOrdersuccess(state, action);
     case actionTypes.DELETE_ORDER_FAILED: return deleteOrderFailed(state, action);
+    case actionTypes.EDIT_ORDER_START: return editOrderStart(state, action);
+    case actionTypes.EDIT_ORDER_SUCCESS: return editOrderSuccess(state, action);
     default:
       return state;
   }

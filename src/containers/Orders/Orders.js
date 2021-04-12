@@ -10,11 +10,6 @@ import Spinner from '../../components/UI/Spinner/Spinner';
 
 class Orders extends Component {
 
-  state = {
-    editing: false,
-    editingId: null
-  }
-
   componentDidMount() {
     this.props.onFetchOrders(this.props.token, this.props.userId);
   }
@@ -35,12 +30,14 @@ class Orders extends Component {
     let orders = <Spinner />;
 
     if (!this.props.loading) {
-      if (this.state.editing) {
-        let order = this.props.orders.find(order => order.id === this.state.editingId); 
+      if (this.props.editing) {
+        let order = this.props.orders.find(order => order.id === this.props.editOrderId); 
         orders = <EditOrder 
-          edit={this.editOrderHandler}
+          id={order.id}
+          edit={() => this.props.updateOrder(this.props.token, this.props.editOrderId)}
+          ingredients={order.ingredients}
           price={order.price}
-          orderInfo={order.data} />;
+          orderData={order.orderData} />;
       } else {
         orders = this.props.orders.map( order => (
           <Order 
@@ -48,7 +45,7 @@ class Orders extends Component {
               ingredients={order.ingredients}
               price={order.price}
               id={order.id}
-              edit={() => this.editOrderHandler(order.id)} />
+              edit={() => this.props.editOrder(this.props.token, order.id)} />
         ) );
       }
     }
@@ -65,13 +62,17 @@ const mapStateToProps = state => {
     orders: state.order.orders,
     loading: state.order.loading,
     token: state.auth.token,
-    userId: state.auth.userId
+    userId: state.auth.userId,
+    editing: state.order.editing,
+    editOrderId: state.order.editOrderId
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    onFetchOrders: (token, userId) => dispatch(actions.fetchOrders(token, userId))
+    onFetchOrders: (token, userId) => dispatch(actions.fetchOrders(token, userId)),
+    editOrder: (token, orderId) => dispatch(actions.editOrder(token, orderId)),
+    updateOrder: (token, orderId) => dispatch(actions.updateOrder(token, orderId))
   };
 };
 

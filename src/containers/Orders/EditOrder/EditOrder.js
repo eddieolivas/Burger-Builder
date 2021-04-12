@@ -11,12 +11,61 @@ import * as classes from "./EditOrder.module.css";
 class EditOrder extends Component {
 
   render () {
-    
+    let ingredients = [];
+
+    for (let ingredientName in this.props.ingredients) {
+      ingredients.push(
+        {
+          name: ingredientName,
+          amount: this.props.ingredients[ingredientName]
+        }
+      );
+    }
+
+    const ingredientOutput = ingredients.map(ig => {
+      return <span
+        style={{
+          textTransform: 'capitalize',
+          display: 'inline-block',
+          margin: '8px 5px',
+          border: '1px solid #ccc',
+          padding: '5px',
+          }}
+        key={ig.name}>{ig.name} ({ig.amount})</span>;
+    });
+
+    let orderData = [];
+
+    for (let dataName in this.props.orderData) {
+      orderData.push(
+        {
+          name: dataName,
+          value: this.props.orderData[dataName]
+        }
+      );
+    }
+
+    const orderDataOutput = orderData.map(ig => {
+      return <span
+        style={{
+          textTransform: 'capitalize',
+          display: 'inline-block',
+          margin: '8px 5px',
+          border: '1px solid #ccc',
+          padding: '5px',
+          }}
+        key={ig.name}>{ig.name} ({ig.value})</span>;
+    });
+
     return (
       <div className={classes.EditOrder}>
-        <h1>Edit Order Page</h1>
-        <h2>Price: {this.props.price}</h2>
-        <button onClick={() => this.props.edit()}>Back to Orders</button>
+        <h1>Edit Order</h1>
+        <p><strong>Price: </strong>{this.props.price}</p>
+        <p><strong>ID: </strong>{this.props.id}</p>
+        <p><strong>Ingredients: </strong>{ingredientOutput}</p>
+        <p><strong>Order Data: </strong>{orderDataOutput}</p>
+
+        <button onClick={this.props.edit}>Update Order</button>
       </div>
     );
   }
@@ -33,7 +82,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    onFetchOrders: (token, userId) => dispatch(actions.fetchOrders(token, userId))
+    editOrder: (token, orderId) => dispatch(actions.editOrder(orderId, token))
   };
 };
 
