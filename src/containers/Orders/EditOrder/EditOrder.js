@@ -4,11 +4,117 @@ import { connect } from 'react-redux';
 import axios from '../../../axios-orders';
 import withErrorHandler from '../../../hoc/withErrorHandler/withErrorHandler';
 import * as actions from '../../../store/actions/index';
+import { updateObject, checkValidity } from '../../../shared/utility';
+import Input from '../../../components/UI/Input/Input';
 
 import * as classes from "./EditOrder.module.css";
 // import Spinner from '../../../components/UI/Spinner/Spinner';
 
 class EditOrder extends Component {
+  state = {
+    orderDataForm: {
+      name: {
+        elementType: 'input',
+        elementConfig: {
+          type: 'text',
+          placeholder: 'Your Name'
+        },
+        value: this.props.orderData.name,
+        validation: {
+          required: true
+        },
+        valid: false,
+        touched: false
+      },
+      street: {
+        elementType: 'input',
+        elementConfig: {
+          type: 'text',
+          placeholder: 'Street Address'
+        },
+        value: this.props.orderData.street,
+        validation: {
+          required: true
+        },
+        valid: false,
+        touched: false
+      },
+      zipCode: {
+        elementType: 'input',
+        elementConfig: {
+          type: 'text',
+          placeholder: 'Postal Code'
+        },
+        value: this.props.orderData.zipCode,
+        validation: {
+          required: true,
+          minLength: 5,
+          maxLength: 5,
+          isNumeric: true
+        },
+        valid: false,
+        touched: false
+      },
+      country: {
+        elementType: 'input',
+        elementConfig: {
+          type: 'text',
+          placeholder: 'Country'
+        },
+        value: this.props.orderData.country,
+        validation: {
+          required: true
+        },
+        valid: false,
+        touched: false
+      },
+      email: {
+        elementType: 'input',
+        elementConfig: {
+          type: 'email',
+          placeholder: 'Your E-mail'
+        },
+        value: this.props.orderData.email,
+        validation: {
+          required: true,
+          isEmail: true
+        },
+        valid: false,
+        touched: false
+      },
+      deliveryMethod: {
+        elementType: 'select',
+        elementConfig: {
+          options: [
+            {value: 'fastest', displayValue: 'Fastest'},
+            {value: 'cheapest', displayValue: 'Cheapest'}
+          ]
+        },
+        value: this.props.orderData.deliveryMethod,
+        validation: {},
+        valid: true
+      }
+    },
+    formIsValid: false
+  }
+
+  inputChangedHandler = (event, inputIdentifier) => {
+    const updatedFormElement = updateObject(this.state.orderDataForm[inputIdentifier], {
+      value: event.target.value,
+      valid: checkValidity(event.target.value, this.state.orderDataForm[inputIdentifier].validation),
+      touched: true
+    });
+    const updatedOrderForm = updateObject(this.state.orderDataForm, {
+      [inputIdentifier]: updatedFormElement
+    });
+    
+    let formIsValid = true;
+    for (let inputIdentifier in updatedOrderForm) {
+      formIsValid = updatedOrderForm[inputIdentifier].valid && formIsValid;
+    }
+
+    this.setState({orderDataForm: updatedOrderForm, formIsValid: formIsValid});
+  }
 
   render () {
     let ingredients = [];
@@ -45,16 +151,26 @@ class EditOrder extends Component {
       );
     }
 
-    const orderDataOutput = orderData.map(ig => {
-      return <span
-        style={{
-          textTransform: 'capitalize',
-          display: 'inline-block',
-          margin: '8px 5px',
-          border: '1px solid #ccc',
-          padding: '5px',
-          }}
-        key={ig.name}>{ig.name} ({ig.value})</span>;
+    const orderDataElements = [];
+    for (let key in this.state.orderDataForm) {
+      orderDataElements.push({
+        id: key,
+        config: this.state.orderDataForm[key]
+      })
+    };
+
+    const orderDataOutput = orderDataElements.map(data => {
+      return (
+          <Input
+            key={data.id}
+            elementType={data.config.elementType} 
+            elementConfig={data.config.elementConfig}
+            value={data.config.value}
+            invalid={!data.config.valid}
+            shouldValidate={data.config.validation}
+            touched={data.config.touched}
+            changed={(event) => this.inputChangedHandler(event, data.id)} />
+      );
     });
 
     return (
@@ -63,9 +179,9 @@ class EditOrder extends Component {
         <p><strong>Price: </strong>${Number.parseFloat(this.props.price).toFixed(2)}</p>
         <p><strong>ID: </strong>{this.props.id}</p>
         <p><strong>Ingredients: </strong>{ingredientOutput}</p>
-        <p><strong>Order Data: </strong>{orderDataOutput}</p>
-
-        <button onClick={this.props.edit}>Update Order</button>
+        <p><strong>Order Data: </strong></p>
+        {orderDataOutput}
+        <p><button onClick={this.props.edit}>Update Order</button></p>
       </div>
     );
   }
