@@ -93,6 +93,10 @@ class EditOrder extends Component {
         value: this.props.orderData.deliveryMethod,
         validation: {},
         valid: true
+      },
+      bacon: {
+        elementType: 'number',
+        value: this.props.ingredients['bacon']
       }
     },
     formIsValid: false
@@ -177,11 +181,10 @@ class EditOrder extends Component {
       <div className={classes.EditOrder}>
         <h1>Edit Order</h1>
         <p><strong>Price: </strong>${Number.parseFloat(this.props.price).toFixed(2)}</p>
-        <p><strong>ID: </strong>{this.props.id}</p>
         <p><strong>Ingredients: </strong>{ingredientOutput}</p>
         <p><strong>Order Data: </strong></p>
         {orderDataOutput}
-        <p><button onClick={this.props.edit}>Update Order</button></p>
+        <p style={{'text-align': 'right'}}><button>Cancel</button> <button onClick={this.props.edit}>Update Order</button></p>
       </div>
     );
   }
