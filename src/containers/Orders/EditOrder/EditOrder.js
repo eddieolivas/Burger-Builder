@@ -93,11 +93,41 @@ class EditOrder extends Component {
         value: this.props.orderData.deliveryMethod,
         validation: {},
         valid: true
-      },
+      }
+    },
+    ingredientForm: {
       bacon: {
         elementType: 'number',
-        value: this.props.ingredients['bacon']
-      }
+        value: this.props.ingredients['bacon'],
+        elementConfig: {
+          type: 'number',
+          placeholder: ''
+        }
+      },
+      salad: {
+        elementType: 'number',
+        value: this.props.ingredients['salad'],
+        elementConfig: {
+          type: 'number',
+          placeholder: ''
+        }
+      },
+      cheese: {
+        elementType: 'number',
+        value: this.props.ingredients['cheese'],
+        elementConfig: {
+          type: 'number',
+          placeholder: ''
+        }
+      },
+      meat: {
+        elementType: 'number',
+        value: this.props.ingredients['meat'],
+        elementConfig: {
+          type: 'number',
+          placeholder: ''
+        }
+      },
     },
     formIsValid: false
   }
@@ -123,25 +153,40 @@ class EditOrder extends Component {
   render () {
     let ingredients = [];
 
-    for (let ingredientName in this.props.ingredients) {
+    for (let ingredientName in this.state.ingredientForm) {
       ingredients.push(
         {
           name: ingredientName,
-          amount: this.props.ingredients[ingredientName]
+          amount: this.state.ingredientForm[ingredientName]
         }
       );
     }
 
-    const ingredientOutput = ingredients.map(ig => {
-      return <span
-        style={{
-          textTransform: 'capitalize',
-          display: 'inline-block',
-          margin: '8px 5px',
-          border: '1px solid #ccc',
-          padding: '5px',
-          }}
-        key={ig.name}>{ig.name} ({ig.amount})</span>;
+    const ingredientDataElements = [];
+    for (let key in this.state.ingredientForm) {
+      ingredientDataElements.push({
+        id: key,
+        config: this.state.ingredientForm[key]
+      })
+    };
+
+    console.log(ingredientDataElements);
+
+    const ingredientOutput = ingredientDataElements.map(data => {
+      return (
+        <div>
+          <label>{data.id}</label> <Input
+            key={data.id}
+            elementType={data.config.elementType} 
+            elementConfig={data.config.elementConfig}
+            value={data.config.value}
+            invalid={!data.config.valid}
+            shouldValidate={data.config.validation}
+            touched={data.config.touched}
+            changed={(event) => this.inputChangedHandler(event, data.id)} />
+        </div>
+        
+      );
     });
 
     let orderData = [];
@@ -182,9 +227,9 @@ class EditOrder extends Component {
         <h1>Edit Order</h1>
         <p><strong>Price: </strong>${Number.parseFloat(this.props.price).toFixed(2)}</p>
         <p><strong>Ingredients: </strong>{ingredientOutput}</p>
-        <p><strong>Order Data: </strong></p>
+        <p><strong>Customer Data: </strong></p>
         {orderDataOutput}
-        <p style={{'text-align': 'right'}}><button>Cancel</button> <button onClick={this.props.edit}>Update Order</button></p>
+        <p><button onClick={this.props.edit}>Cancel</button> <button>Update Order</button></p>
       </div>
     );
   }
