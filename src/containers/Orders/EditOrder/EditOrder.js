@@ -174,8 +174,8 @@ class EditOrder extends Component {
 
     const ingredientOutput = ingredientDataElements.map(data => {
       return (
-        <div>
-          <label>{data.id}</label> <Input
+        <div key={'div-' + data.id}>
+          <label key={'label-' + data.id} className={classes.ingLabel}>{data.id}</label> <Input
             key={data.id}
             elementType={data.config.elementType} 
             elementConfig={data.config.elementConfig}
@@ -185,7 +185,6 @@ class EditOrder extends Component {
             touched={data.config.touched}
             changed={(event) => this.inputChangedHandler(event, data.id)} />
         </div>
-        
       );
     });
 
@@ -226,9 +225,10 @@ class EditOrder extends Component {
       <div className={classes.EditOrder}>
         <h1>Edit Order</h1>
         <p><strong>Price: </strong>${Number.parseFloat(this.props.price).toFixed(2)}</p>
-        <p><strong>Ingredients: </strong>{ingredientOutput}</p>
         <p><strong>Customer Data: </strong></p>
         {orderDataOutput}
+        <p><strong>Ingredients: </strong></p>
+        {ingredientOutput}
         <p><button onClick={this.props.edit}>Cancel</button> <button>Update Order</button></p>
       </div>
     );
