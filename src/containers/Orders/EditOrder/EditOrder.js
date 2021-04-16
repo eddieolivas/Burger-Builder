@@ -11,6 +11,10 @@ import * as classes from "./EditOrder.module.css";
 // import Spinner from '../../../components/UI/Spinner/Spinner';
 
 class EditOrder extends Component {
+
+  componentDidMount() {
+    this.props.onInitIngredients();
+  }
   state = {
     orderDataForm: {
       name: {
@@ -129,7 +133,8 @@ class EditOrder extends Component {
         }
       },
     },
-    formIsValid: false
+    formIsValid: false,
+    totalPrice: Number.parseFloat(this.props.price).toFixed(2)
   }
 
   inputChangedHandler = (event, inputIdentifier) => {
@@ -148,6 +153,17 @@ class EditOrder extends Component {
     }
 
     this.setState({orderDataForm: updatedOrderForm, formIsValid: formIsValid});
+  }
+
+  ingredientChangedHandler = (event, inputIdentifier) => {
+    const updatedIngElement = updateObject(this.state.ingredientForm[inputIdentifier], {
+      value: event.target.value
+    });
+    const updatedIngForm = updateObject(this.state.ingredientForm, {
+      [inputIdentifier]: updatedIngElement
+    });
+    this.props.onIngredientAdded(inputIdentifier);
+    // this.setState({ingredientForm: updatedIngForm});
   }
 
   render () {
@@ -170,8 +186,6 @@ class EditOrder extends Component {
       })
     };
 
-    console.log(ingredientDataElements);
-
     const ingredientOutput = ingredientDataElements.map(data => {
       return (
         <div key={'div-' + data.id}>
@@ -183,7 +197,7 @@ class EditOrder extends Component {
             invalid={!data.config.valid}
             shouldValidate={data.config.validation}
             touched={data.config.touched}
-            changed={(event) => this.inputChangedHandler(event, data.id)} />
+            changed={(event) => this.ingredientChangedHandler(event, data.id)} />
         </div>
       );
     });
@@ -224,11 +238,11 @@ class EditOrder extends Component {
     return (
       <div className={classes.EditOrder}>
         <h1>Edit Order</h1>
-        <p><strong>Price: </strong>${Number.parseFloat(this.props.price).toFixed(2)}</p>
         <p><strong>Customer Data: </strong></p>
         {orderDataOutput}
         <p><strong>Ingredients: </strong></p>
         {ingredientOutput}
+        <p><strong>Price: </strong>${Number.parseFloat(this.props.price).toFixed(2)}</p>
         <p><button onClick={this.props.edit}>Cancel</button> <button>Update Order</button></p>
       </div>
     );
@@ -246,7 +260,10 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    editOrder: (token, orderId) => dispatch(actions.editOrder(orderId, token))
+    editOrder: (token, orderId) => dispatch(actions.editOrder(orderId, token)),
+    onIngredientAdded: (ingName) => dispatch(actions.addIngredient(ingName)),
+    onIngredientRemoved: (ingName) => dispatch(actions.removeIngredient(ingName)),
+    onInitIngredients: () => dispatch(actions.initIngredients())
   };
 };
 
