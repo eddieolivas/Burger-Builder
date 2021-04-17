@@ -47,3 +47,23 @@ a {
 .ViewOrdersButton:hover {
   background: #91f83c;
 }
+
+.loadBurger {
+  animation: loadBurger 0.4s ease-out forwards;
+  transition: all 0.4s ease-out;
+}
+
+@keyframes loadBurger {
+  0% {
+      opacity: 0;
+      transform: translateY(-100%);
+  }
+  50% {
+      opacity: 1;
+      transform: translateY(20%);
+  }
+  100% {
+      opacity: 1;
+      transform: translateY(0);
+  }
+}

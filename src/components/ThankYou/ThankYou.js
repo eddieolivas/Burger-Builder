@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
+// import CSSTransition from 'react-transition-group/CSSTransition';
 
 import classes from './ThankYou.module.css';
 import Burger from '../Burger/Burger';
@@ -9,7 +10,7 @@ import CanvasConfetti from '../UI/CanvasConfetti/CanvsConfetti';
 
 class ThankYou extends Component {
   render() {
-    const burger = this.props.ings ? <Burger ingredients={this.props.ings} /> : null;
+    const burger = this.props.ings ? <Burger className={classes.loadBurger} ingredients={this.props.ings} /> : <div className={classes.loadBurger}>TEST</div>;
     return (
       <div className={classes.ThankYou}>
         <h1>Sweet! You ordered a burger!</h1>
