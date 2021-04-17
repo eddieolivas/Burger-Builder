@@ -92,7 +92,8 @@ class EditOrder extends Component {
           options: [
             {value: 'fastest', displayValue: 'Fastest'},
             {value: 'cheapest', displayValue: 'Cheapest'}
-          ]
+          ],
+          placeholder: 'Delivery Method'
         },
         value: this.props.orderData.deliveryMethod,
         validation: {},
@@ -137,6 +138,7 @@ class EditOrder extends Component {
     totalPrice: Number.parseFloat(this.props.price).toFixed(2)
   }
 
+
   inputChangedHandler = (event, inputIdentifier) => {
     const updatedFormElement = updateObject(this.state.orderDataForm[inputIdentifier], {
       value: event.target.value,
@@ -156,15 +158,26 @@ class EditOrder extends Component {
   }
 
   ingredientChangedHandler = (event, inputIdentifier) => {
+    const INGREDIENT_PRICES = {
+      salad: 0.5,
+      cheese: 0.4,
+      meat: 1.3,
+      bacon: 0.7
+    };
+  
     const updatedIngElement = updateObject(this.state.ingredientForm[inputIdentifier], {
-      value: parseInt(event.target.value, 10),
-      touched: true
+      value: parseInt(event.target.value, 10) || 0
     });
     const updatedIngForm = updateObject(this.state.ingredientForm, {
       [inputIdentifier]: updatedIngElement
     });
+
+    const currentValue = this.state.totalPrice - (this.state.ingredientForm[inputIdentifier].value * INGREDIENT_PRICES[inputIdentifier]);
+    const newValue = event.target.value * INGREDIENT_PRICES[inputIdentifier];
+    const newPrice = Number.parseFloat(currentValue + newValue).toFixed(2);
+
     
-    this.setState({ingredientForm: updatedIngForm});
+    this.setState({ingredientForm: updatedIngForm, totalPrice: newPrice});
   }
 
   render () {
@@ -189,8 +202,8 @@ class EditOrder extends Component {
 
     const ingredientOutput = ingredientDataElements.map(data => {
       return (
-        <div key={'div-' + data.id}>
-          <label key={'label-' + data.id} className={classes.ingLabel}>{data.id}</label> <Input
+        <div key={'div-' + data.id} className={classes.ingredientInput}>
+          <label key={'label-' + data.id} className={classes.label}>{data.id}</label> <Input
             key={data.id}
             elementType={data.config.elementType} 
             elementConfig={data.config.elementConfig}
@@ -198,6 +211,7 @@ class EditOrder extends Component {
             invalid={!data.config.valid}
             shouldValidate={data.config.validation}
             touched={data.config.touched}
+            pattern={"[0-9]*"}
             changed={(event) => this.ingredientChangedHandler(event, data.id)} />
         </div>
       );
@@ -224,6 +238,8 @@ class EditOrder extends Component {
 
     const orderDataOutput = orderDataElements.map(data => {
       return (
+        <div key={'orderdiv-' + data.id}>
+          <label className={classes.label}key={'orderlabel+' + data.id}>{data.config.elementConfig.placeholder}</label>
           <Input
             key={data.id}
             elementType={data.config.elementType} 
@@ -233,10 +249,11 @@ class EditOrder extends Component {
             shouldValidate={data.config.validation}
             touched={data.config.touched}
             changed={(event) => this.inputChangedHandler(event, data.id)} />
+        </div>
       );
     });
 
-    console.log(this.state.ingredientForm);
+    console.log(this.state.totalPrice);
 
     return (
       <div className={classes.EditOrder}>
@@ -245,8 +262,8 @@ class EditOrder extends Component {
         {orderDataOutput}
         <p><strong>Ingredients: </strong></p>
         {ingredientOutput}
-        <p><strong>Price: </strong>${Number.parseFloat(this.props.price).toFixed(2)}</p>
-        <p><button onClick={this.props.edit}>Cancel</button> <button>Update Order</button></p>
+        <p><strong>Price: </strong>${Number.parseFloat(this.state.totalPrice).toFixed(2)}</p>
+        <p><button>Update Order</button> <button onClick={this.props.edit}>Cancel</button></p>
       </div>
     );
   }

@@ -15,6 +15,7 @@ const input = (props) => {
         className={inputClasses.join(' ')}
         {...props.elementConfig}
         value={props.value}
+        patter={props.pattern}
         onChange={props.changed}/>;
       break;
     case ('textarea'):
@@ -38,10 +39,20 @@ const input = (props) => {
         </select>
       );
       break;
+    case ('number'): 
+      inputElement = <input 
+        className={classes.InputElement}
+        {...props.elementConfig}
+        pattern={props.pattern}
+        value={props.value}
+        onChange={props.changed}
+        min={"0"} />;
+      break;
     default:
       inputElement = <input 
         className={classes.InputElement}
         {...props.elementConfig}
+        pattern={props.pattern}
         value={props.value}
         onChange={props.changed} />;
   }

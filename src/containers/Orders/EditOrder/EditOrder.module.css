@@ -4,6 +4,11 @@
   width: 80%;
 }
 
-.ingLabel {
+.label {
   text-transform: capitalize;
+}
+
+.ingredientInput {
+  display: inline-block;
+  max-width: 100px;
 }
