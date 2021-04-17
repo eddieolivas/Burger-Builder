@@ -157,13 +157,14 @@ class EditOrder extends Component {
 
   ingredientChangedHandler = (event, inputIdentifier) => {
     const updatedIngElement = updateObject(this.state.ingredientForm[inputIdentifier], {
-      value: event.target.value
+      value: parseInt(event.target.value, 10),
+      touched: true
     });
     const updatedIngForm = updateObject(this.state.ingredientForm, {
       [inputIdentifier]: updatedIngElement
     });
-    this.props.onIngredientAdded(inputIdentifier);
-    // this.setState({ingredientForm: updatedIngForm});
+    
+    this.setState({ingredientForm: updatedIngForm});
   }
 
   render () {
@@ -234,6 +235,8 @@ class EditOrder extends Component {
             changed={(event) => this.inputChangedHandler(event, data.id)} />
       );
     });
+
+    console.log(this.state.ingredientForm);
 
     return (
       <div className={classes.EditOrder}>
