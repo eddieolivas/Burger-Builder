@@ -46,7 +46,8 @@ const input = (props) => {
         pattern={props.pattern}
         value={props.value}
         onChange={props.changed}
-        min={"0"} />;
+        min={"0"}
+        inputMode="numeric" />;
       break;
     default:
       inputElement = <input 

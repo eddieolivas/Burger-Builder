@@ -1,20 +1,23 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import axios from '../../../axios-orders';
-import withErrorHandler from '../../../hoc/withErrorHandler/withErrorHandler';
-import * as actions from '../../../store/actions/index';
-import { updateObject, checkValidity } from '../../../shared/utility';
-import Input from '../../../components/UI/Input/Input';
+import axios from '../../axios-orders';
+import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
+import * as actions from '../../store/actions/index';
+import { updateObject, checkValidity } from '../../shared/utility';
+import Input from '../../components/UI/Input/Input';
 
 import * as classes from "./EditOrder.module.css";
-// import Spinner from '../../../components/UI/Spinner/Spinner';
+import Spinner from '../../components/UI/Spinner/Spinner';
 
 class EditOrder extends Component {
-
   componentDidMount() {
-    this.props.onInitIngredients();
+    this.props.onFetchOrders(this.props.token, this.props.userId);
+    if (!this.props.order) {
+      this.props.onFetchOrders(this.props.token, this.props.userId);
+    }
   }
+
   state = {
     orderDataForm: {
       name: {
@@ -23,7 +26,7 @@ class EditOrder extends Component {
           type: 'text',
           placeholder: 'Your Name'
         },
-        value: this.props.orderData.name,
+        value: this.props.order.orderData.name,
         validation: {
           required: true
         },
@@ -36,7 +39,7 @@ class EditOrder extends Component {
           type: 'text',
           placeholder: 'Street Address'
         },
-        value: this.props.orderData.street,
+        value: this.props.order.orderData.street,
         validation: {
           required: true
         },
@@ -49,7 +52,7 @@ class EditOrder extends Component {
           type: 'text',
           placeholder: 'Postal Code'
         },
-        value: this.props.orderData.zipCode,
+        value: this.props.order.orderData.zipCode,
         validation: {
           required: true,
           minLength: 5,
@@ -65,7 +68,7 @@ class EditOrder extends Component {
           type: 'text',
           placeholder: 'Country'
         },
-        value: this.props.orderData.country,
+        value: this.props.order.orderData.country,
         validation: {
           required: true
         },
@@ -78,7 +81,7 @@ class EditOrder extends Component {
           type: 'email',
           placeholder: 'Your E-mail'
         },
-        value: this.props.orderData.email,
+        value: this.props.order.orderData.email,
         validation: {
           required: true,
           isEmail: true
@@ -95,7 +98,7 @@ class EditOrder extends Component {
           ],
           placeholder: 'Delivery Method'
         },
-        value: this.props.orderData.deliveryMethod,
+        value: this.props.order.orderData.deliveryMethod,
         validation: {},
         valid: true
       }
@@ -166,7 +169,7 @@ class EditOrder extends Component {
     };
   
     const updatedIngElement = updateObject(this.state.ingredientForm[inputIdentifier], {
-      value: parseInt(event.target.value, 10) || 0
+      value: parseInt(event.target.value, 10) || null
     });
     const updatedIngForm = updateObject(this.state.ingredientForm, {
       [inputIdentifier]: updatedIngElement
@@ -178,6 +181,28 @@ class EditOrder extends Component {
 
     
     this.setState({ingredientForm: updatedIngForm, totalPrice: newPrice});
+  }
+
+  updateOrderHandler = (ingredients, orderData, price) => {
+    let updatedOrderData = {};
+    let updatedIngredients = {};
+
+    Object.keys(ingredients).map((key, index) => {
+      updatedIngredients[key] = ingredients[key].value;
+    });
+
+    Object.keys(orderData).map((key, index) => {
+      updatedOrderData[key] = orderData[key].value
+    });
+
+    const data = {
+      ingredients: updatedIngredients,
+      orderData: updatedOrderData,
+      price
+    };
+
+    this.props.updateOrder(this.props.order.id, this.props.token, data);
+    this.props.history.replace('/orders');
   }
 
   render () {
@@ -253,37 +278,50 @@ class EditOrder extends Component {
       );
     });
 
-    console.log(this.state.totalPrice);
+    let editOrder = <Spinner />;
+
+    if (!this.props.loading) {
+      editOrder = (
+        <div className={classes.EditOrder}>
+          <h1>Edit Order</h1>
+          <p><strong>Customer Data: </strong></p>
+          {orderDataOutput}
+          <p><strong>Ingredients: </strong></p>
+          {ingredientOutput}
+          <p><strong>Price: </strong>${Number.parseFloat(this.state.totalPrice).toFixed(2)}</p>
+          <p><button onClick={() => this.updateOrderHandler(this.state.ingredientForm, this.state.orderDataForm, this.state.totalPrice)}>Update Order</button> <button onClick={this.props.edit}>Cancel</button></p>
+        </div>
+      );
+    }
+
+    console.log('token');
+    console.log(this.props.token);
 
     return (
-      <div className={classes.EditOrder}>
-        <h1>Edit Order</h1>
-        <p><strong>Customer Data: </strong></p>
-        {orderDataOutput}
-        <p><strong>Ingredients: </strong></p>
-        {ingredientOutput}
-        <p><strong>Price: </strong>${Number.parseFloat(this.state.totalPrice).toFixed(2)}</p>
-        <p><button>Update Order</button> <button onClick={this.props.edit}>Cancel</button></p>
+      <div>
+        {editOrder}
       </div>
     );
   }
 }
 
 const mapStateToProps = state => {
+  const order = state.order.orders.find(order => order.id === state.order.editOrderId);
+  console.log(state);
   return {
-    orders: state.order.orders,
     loading: state.order.loading,
     token: state.auth.token,
-    userId: state.auth.userId
+    userId: state.auth.userId,
+    order: order,
+    ingredients: order.ingredients,
+    editing: state.order.editing
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    editOrder: (token, orderId) => dispatch(actions.editOrder(orderId, token)),
-    onIngredientAdded: (ingName) => dispatch(actions.addIngredient(ingName)),
-    onIngredientRemoved: (ingName) => dispatch(actions.removeIngredient(ingName)),
-    onInitIngredients: () => dispatch(actions.initIngredients())
+    updateOrder: (orderId, token, orderData) => dispatch(actions.updateOrder(orderId, token, orderData)),
+    onFetchOrders: (token, userId) => dispatch(actions.fetchOrders(token, userId))
   };
 };
 

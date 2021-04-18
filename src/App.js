@@ -8,14 +8,11 @@ import BurgerBuilder from './containers/BurgerBuilder/BurgerBuilder';
 import Logout from './containers/Auth/Logout/Logout';
 import * as actions from './store/actions/index';
 import Auth from './containers/Auth/Auth';
+import EditOrder from './containers/EditOrder/EditOrder';
 
 const asyncCheckout = asyncComponent(() => {
   return import('./containers/Checkout/Checkout');
 });
-
-// const asyncAuth = asyncComponent(() => {
-//   return import('./containers/Auth/Auth');
-// });
 
 const asyncOrders = asyncComponent(() => {
   return import('./containers/Orders/Orders');
@@ -44,10 +41,11 @@ class App extends Component {
       routes = (
         <Switch>
           <Route path="/checkout" component={asyncCheckout} />
+          <Route path="/orders/edit/:id" render={(props) => <EditOrder {...props} />} />
           <Route path="/orders" component={asyncOrders} />
           <Route path="/logout" component={Logout} />
-          <Route path="/login" signin={true} render={() => <Auth signup={false} />} />
-          <Route path="/sign-up" signin={true} render={() => <Auth signup={true} />} />
+          <Route path="/login" render={() => <Auth signup={false} />} />
+          <Route path="/sign-up" render={() => <Auth signup={true} />} />
           <Route path="/thank-you" component={asyncThankYou} />
           <Route path="/" exact component={BurgerBuilder} />
           <Redirect to="/" />

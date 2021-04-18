@@ -64,9 +64,15 @@ export const fetchOrdersStart = () => {
 export const fetchOrders = (token, userId, orderId = null) => {
   return dispatch => {
     dispatch(fetchOrdersStart());
-    const queryParams = '?auth=' + token + '&orderBy="userId"&equalTo="' + userId + '"&orderBy="id"';
+    let url = '';
+
+    if (orderId) {
+      url = `/orders/${orderId}.json?auth=${token}`;
+    } else {
+      url = '/orders.json?auth=' + token + '&orderBy="userId"&equalTo="' + userId + '"&orderBy="id"';
+    }
   
-    axios.get('/orders.json' + queryParams)
+    axios.get(url)
       .then(res => {
         let fetchedOrders = [];
         for (let key in res.data) {
@@ -118,41 +124,43 @@ export const deleteOrder = (orderId, token) => {
   };
 };
 
-export const editOrderStart = (orderId) => {
+export const viewOrderInit = (orderId) => {
+  localStorage.setItem('editOrderId', orderId);
   return {
-    type: actionTypes.EDIT_ORDER_START,
+    type: actionTypes.VIEW_ORDER_INIT,
     orderId: orderId
   };
 };
 
-export const editOrderFailed = (error) => {
+export const updateOrderStart = () => {
   return {
-    type: actionTypes.EDIT_ORDER_FAILED
-  };
-};
-
-export const editOrderSuccess = () => {
-  return {
-    type: actionTypes.EDIT_ORDER_SUCCESS
-  };
-};
-
-export const editOrder = (orderId) => {
-  return dispatch => {
-    dispatch(editOrderStart(orderId));
-    // const queryParams = '?auth=' + token + '&orderBy="id"&equalTo="' + orderId + '"';
-    // axios.put('/orders.json' + queryParams)
-    //   .then(res => {
-    //     dispatch(editOrderSuccess());
-    //   })
-    //   .catch(err => {
-    //     dispatch(editOrderFailed(err));
-    //   });
+    type: actionTypes.UPDATE_ORDER_START
   }
 }
 
-export const updateOrder = (orderId) => {
+export const updateOrderSuccess = () => {
+  return {
+    type: actionTypes.UPDATE_ORDER_SUCCESS
+  };
+};
+
+export const updateOrderFailed = (error) => {
+  return {
+    type: actionTypes.UPDATE_ORDER_FAILED
+  };
+};
+
+export const updateOrder = (orderId, token, data) => {
   return dispatch => {
-    dispatch(editOrderSuccess());
+    dispatch(updateOrderStart());
+
+    const url = '/orders/';
+    axios.patch(`${url}${orderId}.json?auth=` + token, data)
+      .then(res => {
+        dispatch(updateOrderSuccess());
+      })
+      .catch(err => {
+        dispatch(updateOrderFailed(err));
+      });
   }
 }

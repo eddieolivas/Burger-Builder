@@ -66,18 +66,29 @@ const deleteOrderFailed = (state, action) => {
   return updateObject(state, { loading: false });
 };
 
-const editOrderStart = (state, action) => {
+const viewOrderInit = (state, action) => {
   return updateObject(state, {
     editing: true,
     editOrderId: action.orderId
   });
 };
 
-const editOrderSuccess = (state, action) => {
+const updateOrderStart = (state, action) => {
+  return updateObject(state, {
+    loading: true
+  });
+}
+
+const updateOrderSuccess = (state, action) => {
   return updateObject(state, {
     editing: false,
-    editOrderId: null
+    editOrderId: null,
+    loading: false
   });
+};
+
+const updateOrderFailed = (state, action) => {
+  return updateObject(state, { loading: false });
 };
 
 const reducer = (state = initialState, action) => {
@@ -92,8 +103,10 @@ const reducer = (state = initialState, action) => {
     case actionTypes.DELETE_ORDER_START: return deleteOrderStart(state, action);
     case actionTypes.DELETE_ORDER_SUCCESS: return deleteOrdersuccess(state, action);
     case actionTypes.DELETE_ORDER_FAILED: return deleteOrderFailed(state, action);
-    case actionTypes.EDIT_ORDER_START: return editOrderStart(state, action);
-    case actionTypes.EDIT_ORDER_SUCCESS: return editOrderSuccess(state, action);
+    case actionTypes.VIEW_ORDER_INIT: return viewOrderInit(state, action);
+    case actionTypes.UPDATE_ORDER_START: return updateOrderStart(state, action);
+    case actionTypes.UPDATE_ORDER_SUCCESS: return updateOrderSuccess(state, action);
+    case actionTypes.UPDATE_ORDER_FAILED: return updateOrderFailed(state, action);
     default:
       return state;
   }

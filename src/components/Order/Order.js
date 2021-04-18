@@ -34,7 +34,7 @@ class Order extends Component {
     <div className={classes.Order}>
       <p>Ingredients: {ingredientOutput}</p>
       <p>Price: <strong>${Number.parseFloat(this.props.price).toFixed(2)}</strong></p>
-      <button className={classes.Edit} onClick={() => this.props.editOrder(this.props.id, this.props.token)}>Edit</button>
+      <button className={classes.Edit} onClick={() => this.props.edit(this.props.id)}>Edit</button>
       <button className={classes.Delete} onClick={() => this.props.deleteOrder(this.props.id, this.props.token)}>Delete</button>
     </div>
     );
@@ -52,7 +52,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     deleteOrder: (orderId, token) => dispatch(actions.deleteOrder(orderId, token)),
-    editOrder: (orderId, token) => dispatch(actions.editOrder(orderId, token))
+    editOrder: (orderId, token) => dispatch(actions.viewOrderInit(orderId))
   }
 }
 

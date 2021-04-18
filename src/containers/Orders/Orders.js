@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import Order from '../../components/Order/Order';
-import EditOrder from '../Orders/EditOrder/EditOrder';
 import axios from '../../axios-orders';
 import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
 import * as actions from '../../store/actions/index';
@@ -14,40 +13,23 @@ class Orders extends Component {
     this.props.onFetchOrders(this.props.token, this.props.userId);
   }
 
-  editOrderHandler = (orderId) => {
-    this.setState({
-      editing: !this.state.editing,
-      editingId: orderId
-    });
-    return orderId;
-  }
-
-  showOrderId = (orderId) => {
-    return orderId;
+  viewOrderHandler = (orderId) => {
+    this.props.viewOrder(orderId);
+    this.props.history.push('/orders/edit/' + orderId);
   }
  
   render () {
     let orders = <Spinner />;
 
     if (!this.props.loading) {
-      if (this.props.editing) {
-        let order = this.props.orders.find(order => order.id === this.props.editOrderId); 
-        orders = <EditOrder 
-          id={order.id}
-          edit={() => this.props.updateOrder(this.props.token, this.props.editOrderId)}
-          ingredients={order.ingredients}
-          price={order.price}
-          orderData={order.orderData} />;
-      } else {
-        orders = this.props.orders.map( order => (
-          <Order 
-              key={order.id}
-              ingredients={order.ingredients}
-              price={order.price}
-              id={order.id}
-              edit={() => this.props.editOrder(this.props.token, order.id)} />
-        ) );
-      }
+      orders = this.props.orders.map( order => (
+        <Order 
+            key={order.id}
+            ingredients={order.ingredients}
+            price={order.price}
+            id={order.id}
+            edit={() => this.viewOrderHandler(order.id)} />
+      ) );
     }
     return (
       <div>
@@ -71,7 +53,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     onFetchOrders: (token, userId) => dispatch(actions.fetchOrders(token, userId)),
-    editOrder: (token, orderId) => dispatch(actions.editOrder(token, orderId)),
+    viewOrder: (orderId) => dispatch(actions.viewOrderInit(orderId)),
     updateOrder: (token, orderId) => dispatch(actions.updateOrder(token, orderId))
   };
 };
