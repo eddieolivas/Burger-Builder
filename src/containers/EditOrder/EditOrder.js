@@ -189,10 +189,12 @@ class EditOrder extends Component {
 
     Object.keys(ingredients).map((key, index) => {
       updatedIngredients[key] = ingredients[key].value;
+      return true;
     });
 
     Object.keys(orderData).map((key, index) => {
-      updatedOrderData[key] = orderData[key].value
+      updatedOrderData[key] = orderData[key].value;
+      return true;
     });
 
     const data = {
