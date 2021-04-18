@@ -138,7 +138,7 @@ class EditOrder extends Component {
       },
     },
     formIsValid: false,
-    totalPrice: Number.parseFloat(this.props.price).toFixed(2)
+    totalPrice: Number.parseFloat(this.props.order.price).toFixed(2)
   }
 
 
