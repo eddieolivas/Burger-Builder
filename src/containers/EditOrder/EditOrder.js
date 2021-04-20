@@ -11,13 +11,6 @@ import * as classes from "./EditOrder.module.css";
 import Spinner from '../../components/UI/Spinner/Spinner';
 
 class EditOrder extends Component {
-  componentDidMount() {
-    this.props.onFetchOrders(this.props.token, this.props.userId);
-    if (!this.props.order) {
-      this.props.onFetchOrders(this.props.token, this.props.userId);
-    }
-  }
-
   state = {
     orderDataForm: {
       name: {
@@ -296,9 +289,6 @@ class EditOrder extends Component {
       );
     }
 
-    console.log('token');
-    console.log(this.props.token);
-
     return (
       <div>
         {editOrder}
@@ -309,7 +299,6 @@ class EditOrder extends Component {
 
 const mapStateToProps = state => {
   const order = state.order.orders.find(order => order.id === state.order.editOrderId);
-  console.log(state);
   return {
     loading: state.order.loading,
     token: state.auth.token,
@@ -322,8 +311,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    updateOrder: (orderId, token, orderData) => dispatch(actions.updateOrder(orderId, token, orderData)),
-    onFetchOrders: (token, userId) => dispatch(actions.fetchOrders(token, userId))
+    updateOrder: (orderId, token, orderData) => dispatch(actions.updateOrder(orderId, token, orderData))
   };
 };
 

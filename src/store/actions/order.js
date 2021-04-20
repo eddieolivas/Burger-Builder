@@ -138,9 +138,11 @@ export const updateOrderStart = () => {
   }
 }
 
-export const updateOrderSuccess = () => {
+export const updateOrderSuccess = (orderId, data) => {
   return {
-    type: actionTypes.UPDATE_ORDER_SUCCESS
+    type: actionTypes.UPDATE_ORDER_SUCCESS,
+    orderId: orderId,
+    data: data
   };
 };
 
@@ -157,7 +159,7 @@ export const updateOrder = (orderId, token, data) => {
     const url = '/orders/';
     axios.patch(`${url}${orderId}.json?auth=` + token, data)
       .then(res => {
-        dispatch(updateOrderSuccess());
+        dispatch(updateOrderSuccess(orderId, res.data));
       })
       .catch(err => {
         dispatch(updateOrderFailed(err));

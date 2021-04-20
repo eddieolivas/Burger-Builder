@@ -41,7 +41,7 @@ class App extends Component {
       routes = (
         <Switch>
           <Route path="/checkout" component={asyncCheckout} />
-          <Route path="/orders/edit/:id" render={(props) => <EditOrder {...props} />} />
+          <Route path="/orders/edit/:id" render={(props) => <EditOrder id={ this.props.editOrderId } {...props} />} />
           <Route path="/orders" component={asyncOrders} />
           <Route path="/logout" component={Logout} />
           <Route path="/login" render={() => <Auth signup={false} />} />
@@ -64,10 +64,13 @@ class App extends Component {
 }
 
 const mapStateToProps = state => {
-  const token = localStorage.getItem('token') ? localStorage.getItem('token') : state.auth.token; 
+  const token = localStorage.getItem('token') ? localStorage.getItem('token') : state.auth.token;
+  const editOrderId = localStorage.getItem('editOrderId') ? localStorage.getItem('editOrderId') : '';
   return {
-    isAuthenticated: token !== null
+    isAuthenticated: token !== null,
+    editOrderId: editOrderId
   };
+  
 }
 
 const mapDispatchToProps = dispatch => {

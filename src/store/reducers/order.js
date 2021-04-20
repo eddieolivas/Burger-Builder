@@ -80,6 +80,16 @@ const updateOrderStart = (state, action) => {
 }
 
 const updateOrderSuccess = (state, action) => {
+  // const order = action.data;
+  // const index = state.orders.findIndex(order => order.id === action.orderId);
+  // const updatedOrders = updateObject(state.orders, {
+  //   [index]: action.data
+  // });
+  // console.log("order:");
+  // console.log(order);
+  // console.log(state.orders);
+  // console.log(updatedOrders);
+
   return updateObject(state, {
     editing: false,
     editOrderId: null,
