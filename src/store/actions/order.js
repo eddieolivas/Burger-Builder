@@ -160,6 +160,7 @@ export const updateOrder = (orderId, token, data) => {
     axios.patch(`${url}${orderId}.json?auth=` + token, data)
       .then(res => {
         dispatch(updateOrderSuccess(orderId, res.data));
+        localStorage.setItem('editOrderId', null);
       })
       .catch(err => {
         dispatch(updateOrderFailed(err));
