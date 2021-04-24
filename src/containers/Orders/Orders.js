@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 
 import Order from '../../components/Order/Order';
 import axios from '../../axios-orders';
@@ -23,14 +24,16 @@ class Orders extends Component {
     let orders = <Spinner />;
 
     if (!this.props.loading) {
-      orders = this.props.orders.map( order => (
-        <Order 
-            key={order.id}
-            ingredients={order.ingredients}
-            price={order.price}
-            id={order.id}
-            edit={() => this.viewOrderHandler(order.id)} />
-      ) );
+      this.props.orders.length === 0
+        ? orders = ( <div style={{maxWidth: '800px', margin: 'auto', textAlign: 'center', paddingTop: '35px'}}>You have not yet ordered a burger. Feel free to <Link to="/">order one</Link>!</div>)
+        : orders = this.props.orders.map( order => (
+          <Order 
+              key={order.id}
+              ingredients={order.ingredients}
+              price={order.price}
+              id={order.id}
+              edit={() => this.viewOrderHandler(order.id)} />
+        ) );
     }
     return (
       <div>
