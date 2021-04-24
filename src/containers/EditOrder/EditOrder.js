@@ -99,7 +99,7 @@ class EditOrder extends Component {
     ingredientForm: {
       bacon: {
         elementType: 'number',
-        value: this.props.ingredients['bacon'],
+        value: this.props.order.ingredients['bacon'],
         elementConfig: {
           type: 'number',
           placeholder: ''
@@ -107,7 +107,7 @@ class EditOrder extends Component {
       },
       salad: {
         elementType: 'number',
-        value: this.props.ingredients['salad'],
+        value: this.props.order.ingredients['salad'],
         elementConfig: {
           type: 'number',
           placeholder: ''
@@ -115,7 +115,7 @@ class EditOrder extends Component {
       },
       cheese: {
         elementType: 'number',
-        value: this.props.ingredients['cheese'],
+        value: this.props.order.ingredients['cheese'],
         elementConfig: {
           type: 'number',
           placeholder: ''
@@ -123,7 +123,7 @@ class EditOrder extends Component {
       },
       meat: {
         elementType: 'number',
-        value: this.props.ingredients['meat'],
+        value: this.props.order.ingredients['meat'],
         elementConfig: {
           type: 'number',
           placeholder: ''
@@ -134,6 +134,11 @@ class EditOrder extends Component {
     totalPrice: Number.parseFloat(this.props.order.price).toFixed(2)
   }
 
+  componentDidUpdate() {
+    if (!this.props.editing) {
+      this.props.history.replace('/orders');
+    }
+  }
 
   inputChangedHandler = (event, inputIdentifier) => {
     const updatedFormElement = updateObject(this.state.orderDataForm[inputIdentifier], {
@@ -197,7 +202,6 @@ class EditOrder extends Component {
     };
 
     this.props.updateOrder(this.props.order.id, this.props.token, data);
-    this.props.history.replace('/orders');
   }
 
   render () {
@@ -284,7 +288,7 @@ class EditOrder extends Component {
           <p><strong>Ingredients: </strong></p>
           {ingredientOutput}
           <p><strong>Price: </strong>${Number.parseFloat(this.state.totalPrice).toFixed(2)}</p>
-          <p><button onClick={() => this.updateOrderHandler(this.state.ingredientForm, this.state.orderDataForm, this.state.totalPrice)}>Update Order</button> <button onClick={this.props.edit}>Cancel</button></p>
+          <p><button onClick={() => this.updateOrderHandler(this.state.ingredientForm, this.state.orderDataForm, this.state.totalPrice)}>Update Order</button> <button onClick={this.props.cancelViewOrder}>Cancel</button></p>
         </div>
       );
     }
@@ -298,20 +302,24 @@ class EditOrder extends Component {
 }
 
 const mapStateToProps = state => {
-  const order = state.order.orders.find(order => order.id === state.order.editOrderId);
+  let orderData = state.order.editOrderData;
+  if (!orderData) {
+    orderData = JSON.parse(localStorage.getItem('editOrderData'));
+  }
   return {
     loading: state.order.loading,
     token: state.auth.token,
     userId: state.auth.userId,
-    order: order,
-    ingredients: order.ingredients,
-    editing: state.order.editing
+    editing: state.order.editing,
+    order: orderData
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    updateOrder: (orderId, token, orderData) => dispatch(actions.updateOrder(orderId, token, orderData))
+    onFetchOrders: (token, userId) => dispatch(actions.fetchOrders(token, userId)),
+    updateOrder: (orderId, token, orderData) => dispatch(actions.updateOrder(orderId, token, orderData)),
+    cancelViewOrder: () => dispatch(actions.cancelViewOrder())
   };
 };
 

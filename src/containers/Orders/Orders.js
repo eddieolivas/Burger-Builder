@@ -14,7 +14,8 @@ class Orders extends Component {
   }
 
   viewOrderHandler = (orderId) => {
-    this.props.viewOrder(orderId);
+    const order = this.props.orders.find(order => order.id === orderId);
+    this.props.viewOrder(orderId, order);
     this.props.history.push('/orders/edit/' + orderId);
   }
  
@@ -53,7 +54,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     onFetchOrders: (token, userId) => dispatch(actions.fetchOrders(token, userId)),
-    viewOrder: (orderId) => dispatch(actions.viewOrderInit(orderId)),
+    viewOrder: (orderId, order) => dispatch(actions.viewOrderInit(orderId, order)),
     updateOrder: (token, orderId) => dispatch(actions.updateOrder(token, orderId))
   };
 };

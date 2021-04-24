@@ -124,12 +124,20 @@ export const deleteOrder = (orderId, token) => {
   };
 };
 
-export const viewOrderInit = (orderId) => {
+export const viewOrderInit = (orderId, orderData) => {
   localStorage.setItem('editOrderId', orderId);
+  localStorage.setItem('editOrderData', JSON.stringify(orderData));
   return {
     type: actionTypes.VIEW_ORDER_INIT,
-    orderId: orderId
+    orderId: orderId,
+    orderData: orderData
   };
+};
+
+export const cancelViewOrder = () => {
+  return {
+    type: actionTypes.CANCEL_VIEW_ORDER
+  }
 };
 
 export const updateOrderStart = () => {

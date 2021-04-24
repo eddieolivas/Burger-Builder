@@ -9,7 +9,8 @@ export {
   fetchOrders,
   deleteOrder,
   viewOrderInit,
-  updateOrder
+  updateOrder,
+  cancelViewOrder
 } from './order';
 export {
   auth,

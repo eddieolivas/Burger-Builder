@@ -6,7 +6,8 @@ const initialState = {
   loading: false,
   purchased: false,
   editing: false,
-  editOrderId: null
+  editOrderId: null,
+  editOrderData: null
 };
 
 const purchaseInit = (state, action) => {
@@ -69,7 +70,16 @@ const deleteOrderFailed = (state, action) => {
 const viewOrderInit = (state, action) => {
   return updateObject(state, {
     editing: true,
-    editOrderId: action.orderId
+    editOrderId: action.orderId,
+    editOrderData: action.orderData
+  });
+};
+
+const cancelViewOrder = (state, action) => {
+  return updateObject(state, {
+    editing: false,
+    editOrderId: null,
+    editOrderData: null
   });
 };
 
@@ -115,6 +125,7 @@ const reducer = (state = initialState, action) => {
     case actionTypes.DELETE_ORDER_SUCCESS: return deleteOrdersuccess(state, action);
     case actionTypes.DELETE_ORDER_FAILED: return deleteOrderFailed(state, action);
     case actionTypes.VIEW_ORDER_INIT: return viewOrderInit(state, action);
+    case actionTypes.CANCEL_VIEW_ORDER: return cancelViewOrder(state, action);
     case actionTypes.UPDATE_ORDER_START: return updateOrderStart(state, action);
     case actionTypes.UPDATE_ORDER_SUCCESS: return updateOrderSuccess(state, action);
     case actionTypes.UPDATE_ORDER_FAILED: return updateOrderFailed(state, action);

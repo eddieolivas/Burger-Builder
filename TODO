@@ -1,0 +1,13 @@
+TODO
+
+Set up a functional component called EditOrderForm
+Load EditOrderForm within EditorOrder
+Manage state of the form within EditOrderForm
+
+Set up EditOrder to only handle getting the data of the order passed to it
+If the state contains data about that order pass it to EditOrderForm
+Else send an axios request to fetch data about ONLY that order and pass it to EditOrderForm
+
+Set up a value in the Redux store called OrderEdited
+Once the order is updated set that value
+Set up Orders to show a green "Order updated" message if that value is present 
