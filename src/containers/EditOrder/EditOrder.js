@@ -186,7 +186,7 @@ class EditOrder extends Component {
     let updatedIngredients = {};
 
     Object.keys(ingredients).map((key, index) => {
-      updatedIngredients[key] = ingredients[key].value;
+      updatedIngredients[key] = ingredients[key].value || 0;
       return true;
     });
 
