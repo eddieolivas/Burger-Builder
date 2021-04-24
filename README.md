@@ -1,6 +1,8 @@
 ## Burger Builder 
 
-The Burger Builder is a fun little demo project built with Create React App. 
+The Burger Builder is a demo project built with Create React App and CSS animations.
+
+You can sign up or log in to purchase a burger and your order will be saved in Firebase. You can also edit and delete your orders.
 
 See it in action here: https://eddies-burger-builder.netlify.app/
 
